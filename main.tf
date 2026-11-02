@@ -7,12 +7,12 @@ terraform {
   }
 }
 
-resource "local_file" "example" {
+resource "local_file" "main" {
   filename = local.file_name
   content  = var.file_content
 }
 
 resource "local_file" "copy" {
   filename = "copy.txt"
-  content  = local_file.example.content
+  content  = local_file.main.content
 }
