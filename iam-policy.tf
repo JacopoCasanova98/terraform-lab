@@ -10,7 +10,7 @@ data "aws_iam_policy_document" "s3_read_write" {
     ]
 
     resources = [
-      "arn:aws:s3:::my-app-bucket/*"
+      "${aws_s3_bucket.storage.arn}/*"
     ]
   }
 
@@ -23,7 +23,7 @@ data "aws_iam_policy_document" "s3_read_write" {
     ]
 
     resources = [
-      "arn:aws:s3:::my-app-bucket"
+      aws_s3_bucket.storage.arn
     ]
   }
 }
@@ -92,24 +92,5 @@ resource "aws_iam_group_policy_attachment" "test-attach" {
 
 resource "aws_iam_instance_profile" "test_profile" {
   name = "test_profile"
-  role = aws_iam_role.role.name
-}
-
-data "aws_iam_policy_document" "assume_role" {
-  statement {
-    effect = "Allow"
-
-    principals {
-      type        = "Service"
-      identifiers = ["ec2.amazonaws.com"]
-    }
-
-    actions = ["sts:AssumeRole"]
-  }
-}
-
-resource "aws_iam_role" "role" {
-  name               = "test_role"
-  path               = "/"
-  assume_role_policy = data.aws_iam_policy_document.assume_role.json
+  role = aws_iam_role.ec2_s3_role.name
 }
