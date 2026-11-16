@@ -5,3 +5,7 @@ variable "vpc_id" {
 variable "admin_cidr" {
   type        = string
 }
+
+variable "subnet_id" {
+  type        = string
+}

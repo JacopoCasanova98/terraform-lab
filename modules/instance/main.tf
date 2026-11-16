@@ -1,6 +1,7 @@
+
 resource "aws_security_group" "instance_sg" {
   name   = "terraform-lab-instance-sg"
-  vpc_id      = var.vpc_id
+  vpc_id = var.vpc_id
 
   tags = {
     Name = "terraform-lab-instance-sg"
@@ -21,28 +22,33 @@ resource "aws_vpc_security_group_egress_rule" "allow_all_traffic_ipv4" {
   ip_protocol       = "-1"
 }
 
-data "aws_ami" "ubuntu" {
+data "aws_ami" "amazon_linux" {
   most_recent = true
+  owners      = ["137112412989"]
 
   filter {
     name   = "name"
-    values = ["ubuntu/images/hvm-ssd/ubuntu-jammy-22.04-amd64-server-*"]
+    values = ["al2023-ami-*-x86_64"]
+  }
+
+  filter {
+    name   = "architecture"
+    values = ["x86_64"]
   }
 
   filter {
     name   = "virtualization-type"
     values = ["hvm"]
   }
-
-  owners = ["099720109477"]
 }
 
 resource "aws_instance" "instance" {
-  ami           = data.aws_ami.ubuntu.id
-  instance_type = "t3.micro"
+  ami                    = data.aws_ami.amazon_linux.id
+  instance_type          = "t3.micro"
+  subnet_id              = var.subnet_id
+  vpc_security_group_ids = [aws_security_group.instance_sg.id]
 
-    tags = {
-    Name = "instance"
+  tags = {
+    Name = "terraform-lab-instance"
   }
 }
-

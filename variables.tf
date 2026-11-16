@@ -21,3 +21,12 @@ variable "availability_zone" {
 variable "admin_cidr" {
   type = string
 }
+
+# storage:
+variable "storage_bucket_name" {
+  type = string
+}
+
+variable "tags" {
+  type = map(string)
+}

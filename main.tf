@@ -12,6 +12,12 @@ module "instance" {
 
   vpc_id     = module.network.vpc_id
   admin_cidr = var.admin_cidr
-  subnet_public_id = module.network.subnet_public_id
-  security_group_id = module.network.security_group_id
+  subnet_id  = module.network.subnet_public_id
+}
+
+module "storage" {
+  source = "./modules/storage"
+
+  tags        = var.tags
+  bucket_name = var.storage_bucket_name
 }
