@@ -21,3 +21,10 @@ module "storage" {
   tags        = var.tags
   bucket_name = var.storage_bucket_name
 }
+
+module "iam" {
+  source = "./modules/iam"
+
+  bucket_arn  = module.storage.bucket_arn
+  kms_key_arn = module.storage.kms_key_arn
+}

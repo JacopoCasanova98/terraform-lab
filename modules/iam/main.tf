@@ -3,57 +3,59 @@ resource "aws_iam_role" "iam_role" {
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
+
     Statement = [
       {
-        Action = "sts:AssumeRole"
         Effect = "Allow"
-        Sid    = ""
+        Action = "sts:AssumeRole"
+
         Principal = {
           Service = "ec2.amazonaws.com"
         }
-      },
+      }
     ]
   })
 
   tags = {
-    tag-key = "tag-value"
+    Name = "iam_role"
   }
 }
 
 resource "aws_iam_policy" "policy" {
   name        = "read_policy"
   path        = "/"
-  description = "My read policy"
+  description = "Allow EC2 to read objects from the S3 bucket"
 
   policy = jsonencode({
     Version = "2012-10-17"
+
     Statement = [
       {
+        Effect = "Allow"
         Action = [
-          "kms:Decrypt",
+          "s3:ListBucket"
         ]
-        Effect   = "Allow"
-        Resource = "var.bucket_name"
+        Resource = var.bucket_arn
       },
       {
+        Effect = "Allow"
         Action = [
-          "s3:ListBucket",
+          "s3:GetObject"
         ]
-        Effect   = "Allow"
-        Resource = "var.bucket_name"
+        Resource = "${var.bucket_arn}/*"
       },
       {
+        Effect = "Allow"
         Action = [
-          "s3:GetObject",
+          "kms:Decrypt"
         ]
-        Effect   = "Allow"
-        Resource = "var.bucket_name"
-      },
+        Resource = var.kms_key_arn
+      }
     ]
   })
 }
 
-resource "aws_iam_role_policy_attachment" "test-attach" {
+resource "aws_iam_role_policy_attachment" "policy_attachment" {
   role       = aws_iam_role.iam_role.name
   policy_arn = aws_iam_policy.policy.arn
 }

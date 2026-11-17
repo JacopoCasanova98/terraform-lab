@@ -1,7 +1,7 @@
 variable "bucket_name" {
-  type        = string
+  type = string
 }
 
 variable "tags" {
-  type        = map(string)
+  type = map(string)
 }

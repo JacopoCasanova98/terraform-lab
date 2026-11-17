@@ -1,11 +1,11 @@
 variable "vpc_id" {
-  type        = string
+  type = string
 }
 
 variable "admin_cidr" {
-  type        = string
+  type = string
 }
 
 variable "subnet_id" {
-  type        = string
+  type = string
 }
