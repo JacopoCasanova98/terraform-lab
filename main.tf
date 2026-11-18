@@ -10,9 +10,10 @@ module "network" {
 module "instance" {
   source = "./modules/instance"
 
-  vpc_id     = module.network.vpc_id
-  admin_cidr = var.admin_cidr
-  subnet_id  = module.network.subnet_public_id
+  vpc_id                = module.network.vpc_id
+  admin_cidr            = var.admin_cidr
+  subnet_id             = module.network.subnet_public_id
+  instance_profile_name = module.iam.instance_profile_name
 }
 
 module "storage" {

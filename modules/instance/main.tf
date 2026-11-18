@@ -44,6 +44,7 @@ data "aws_ami" "amazon_linux" {
 
 resource "aws_instance" "instance" {
   ami                    = data.aws_ami.amazon_linux.id
+  iam_instance_profile   = var.instance_profile_name
   instance_type          = "t3.micro"
   subnet_id              = var.subnet_id
   vpc_security_group_ids = [aws_security_group.instance_sg.id]
