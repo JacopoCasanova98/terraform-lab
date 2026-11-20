@@ -1,0 +1,42 @@
+
+name: Terraform CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  terraform-static-checks:
+    name: Terraform static checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v4
+        with:
+          terraform_version: "1.5.0"
+          terraform_wrapper: false
+
+      - name: Check formatting
+        run: terraform fmt -check -recursive
+
+      - name: Initialize main root
+        run: terraform init -backend=false -input=false -lockfile=readonly
+
+      - name: Validate main root
+        run: terraform validate -no-color
+
+      - name: Initialize bootstrap
+        run: terraform -chdir=bootstrap init -backend=false -input=false -lockfile=readonly
+
+      - name: Validate bootstrap
+        run: terraform -chdir=bootstrap validate -no-color
