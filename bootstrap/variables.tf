@@ -7,3 +7,8 @@ variable "tags" {
   description = "Tags applied to bootstrap resources"
   type        = map(string)
 }
+
+variable "trusted_principal_arn" {
+  description = "ARN dell'identità AWS autorizzata ad assumere il ruolo backend"
+  type        = string
+}

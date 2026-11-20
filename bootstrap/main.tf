@@ -49,3 +49,17 @@ resource "aws_dynamodb_table" "terraform_lock" {
 
   tags = var.tags
 }
+
+data "aws_caller_identity" "current" {}
+
+module "backend_iam" {
+  source = "../modules/backend_iam"
+
+  bucket_name         = aws_s3_bucket.s3_bucket_bootstrap.bucket
+  state_key           = "terraform-lab/terraform.tfstate"
+  dynamodb_table_name = aws_dynamodb_table.terraform_lock.name
+  kms_key_arn         = aws_kms_key.bootstrap.arn
+  aws_account_id      = data.aws_caller_identity.current.account_id
+
+  trusted_principal_arn = var.trusted_principal_arn
+}

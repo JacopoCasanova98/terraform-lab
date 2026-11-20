@@ -12,3 +12,8 @@ output "kms_key_arn" {
   description = "ARN of the KMS key used to encrypt Terraform state objects"
   value       = aws_kms_key.bootstrap.arn
 }
+
+output "backend_role_arn" {
+  description = "ARN del ruolo IAM per l'accesso al backend Terraform"
+  value       = module.backend_iam.backend_role_arn
+}
